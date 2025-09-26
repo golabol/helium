@@ -136,16 +136,18 @@
 +      std::make_unique<views::RoundRectHighlightPathGenerator>(kInkDropInsets, kCornerRadius);
    ring_highlight_path->set_use_contents_bounds(true);
    views::FocusRing::Get(this)->SetPathGenerator(std::move(ring_highlight_path));
---- a/chrome/browser/ui/views/tabs/tab_group_highlight.h
-+++ b/chrome/browser/ui/views/tabs/tab_group_highlight.h
-@@ -33,11 +33,8 @@ class TabGroupHighlight : public views::View {
-   void UpdateBounds(views::View* leading_view, views::View* trailing_view);
-
-   // views::View:
--  void OnPaint(gfx::Canvas* canvas) override;
-+  void OnPaint(gfx::Canvas* canvas) override {}
-
-  private:
-   // Returns the highlight shape, which immitates the tab highlight shape.
--  SkPath GetPath() const;
-+  SkPath GetPath() const { return SkPath(); }
+--- a/chrome/browser/ui/views/tabs/tab_group_highlight.cc
++++ b/chrome/browser/ui/views/tabs/tab_group_highlight.cc
+@@ -34,13 +34,7 @@ void TabGroupHighlight::UpdateBounds(views::View* leading_view,
+ 
+ void TabGroupHighlight::OnPaint(gfx::Canvas* canvas) {
+-  SkPath path = GetPath();
+-  cc::PaintFlags flags;
+-  flags.setAntiAlias(true);
+-  flags.setStyle(cc::PaintFlags::kFill_Style);
+-  flags.setColor(TabStyle::Get()->GetTabBackgroundColor(
+-      TabStyle::TabSelectionState::kSelected, /*hovered=*/false,
+-      GetWidget()->ShouldPaintAsActive(), *GetColorProvider()));
+-  canvas->DrawPath(path, flags);
++  // Disabled: no tab group highlight background (Brave-style)
+ }
