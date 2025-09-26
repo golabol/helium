@@ -136,18 +136,16 @@
 +      std::make_unique<views::RoundRectHighlightPathGenerator>(kInkDropInsets, kCornerRadius);
    ring_highlight_path->set_use_contents_bounds(true);
    views::FocusRing::Get(this)->SetPathGenerator(std::move(ring_highlight_path));
-
- 
 --- a/chrome/browser/ui/views/tabs/tab_group_highlight.h
 +++ b/chrome/browser/ui/views/tabs/tab_group_highlight.h
-@@ -35,7 +35,7 @@ class TabGroupHighlight : public views::View {
+@@ -33,11 +33,8 @@ class TabGroupHighlight : public views::View {
    void UpdateBounds(views::View* leading_view, views::View* trailing_view);
- 
+
    // views::View:
 -  void OnPaint(gfx::Canvas* canvas) override;
 +  void OnPaint(gfx::Canvas* canvas) override {}
- 
+
   private:
    // Returns the highlight shape, which immitates the tab highlight shape.
 -  SkPath GetPath() const;
-+  SkPath GetPath() const { return SkPath(); }  // No highlight shape → invisible
++  SkPath GetPath() const { return SkPath(); }
