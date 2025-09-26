@@ -105,6 +105,35 @@
    static constexpr int kTouchMinimumContentsWidthForCloseButtons = 100;
  
    // Sets whether hover cards should appear on mouse hover. Used in browser
+--- a/chrome/browser/ui/views/tabs/tab_group_highlight.cc
++++ b/chrome/browser/ui/views/tabs/tab_group_highlight.cc
+@@ -53,27 +53,8 @@ SkPath TabGroupHighlight::GetPath() cons
+   // which is a well-scoped interaction. A dragging group doesn't nestle in with
+   // the tabs around it, so there are no special cases needed when determining
+   // its shape.
+-  const int corner_radius = TabStyle::Get()->GetBottomCornerRadius();
+-  const int top = GetLayoutConstant(TAB_STRIP_PADDING);
+ 
+   SkPath path;
+-  path.moveTo(0, bounds().height());
+-  path.arcTo(corner_radius, corner_radius, 0, SkPath::kSmall_ArcSize,
+-             SkPathDirection::kCCW, corner_radius,
+-             bounds().height() - corner_radius);
+-  path.lineTo(corner_radius, top + corner_radius);
+-  path.arcTo(corner_radius, corner_radius, 0, SkPath::kSmall_ArcSize,
+-             SkPathDirection::kCW, 2 * corner_radius, top);
+-  path.lineTo(bounds().width() - 2 * corner_radius, top);
+-  path.arcTo(corner_radius, corner_radius, 0, SkPath::kSmall_ArcSize,
+-             SkPathDirection::kCW, bounds().width() - corner_radius,
+-             top + corner_radius);
+-  path.lineTo(bounds().width() - corner_radius,
+-              bounds().height() - corner_radius);
+-  path.arcTo(corner_radius, corner_radius, 0, SkPath::kSmall_ArcSize,
+-             SkPathDirection::kCCW, bounds().width(), bounds().height());
+-  path.close();
+-
+   return {};
+ }
  
 --- a/chrome/browser/ui/views/tabs/tab_close_button.cc
 +++ b/chrome/browser/ui/views/tabs/tab_close_button.cc
@@ -136,18 +165,4 @@
 +      std::make_unique<views::RoundRectHighlightPathGenerator>(kInkDropInsets, kCornerRadius);
    ring_highlight_path->set_use_contents_bounds(true);
    views::FocusRing::Get(this)->SetPathGenerator(std::move(ring_highlight_path));
---- a/chrome/browser/ui/views/tabs/tab_group_highlight.cc
-+++ b/chrome/browser/ui/views/tabs/tab_group_highlight.cc
-@@ -35,9 +35,3 @@ void TabGroupHighlight::UpdateBounds(views::View* leading_view,
  
- void TabGroupHighlight::OnPaint(gfx::Canvas* canvas) {
--  SkPath path = GetPath();
--  cc::PaintFlags flags;
--  flags.setAntiAlias(true);
--  flags.setStyle(cc::PaintFlags::kFill_Style);
--  flags.setColor(TabStyle::Get()->GetTabBackgroundColor(
--      TabStyle::TabSelectionState::kSelected, /*hovered=*/false,
--      GetWidget()->ShouldPaintAsActive(), *GetColorProvider()));
--  canvas->DrawPath(path, flags);
-+  // Disabled: no tab group highlight background (Brave-style)
- }
