@@ -132,7 +132,8 @@
 -             SkPathDirection::kCCW, bounds().width(), bounds().height());
 -  path.close();
 -
-   return {};
+-  return path;
++  return {};
  }
  
 --- a/chrome/browser/ui/views/tabs/tab_close_button.cc
